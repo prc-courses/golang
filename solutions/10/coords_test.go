@@ -30,3 +30,15 @@ func TestSolver(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkSolver(b *testing.B) {
+	// Init solver and channels
+	questions := make(chan polar)
+	answers := createSolver(questions)
+	// Run benchmarks
+	for i := 0; i < b.N; i++ {
+		tc := i % len(solvertests)
+		questions <- solvertests[tc].in
+		<-answers
+	}
+}
